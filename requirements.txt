@@ -1,0 +1,8 @@
+# Python dependencies for SSH Key Generator
+#
+# Note: tkinter is part of Python's standard library but requires a system package
+# on Linux. Install it with:
+#   sudo apt install python3-tk
+#
+# This file is for pip-installable packages. System packages must be installed separately.
+
