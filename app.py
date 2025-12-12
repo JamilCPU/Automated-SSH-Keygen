@@ -5,7 +5,8 @@ GUI for automating SSH key creation with input fields for comment and directorie
 """
 
 import tkinter as tk
-from tkinter import ttk, filedialog
+from tkinter import ttk, filedialog, messagebox
+from commands.ssh import generate_ssh_key
 
 
 class SSHKeyGeneratorApp:
@@ -112,13 +113,12 @@ class SSHKeyGeneratorApp:
     
     def generate_key(self):
         """
-        Generate SSH key based on user input.
-        This function will be expanded with key generation logic.
+        Generate SSH key based on user input using Ed25519 algorithm.
         """
         # Get all field values
         values = self.get_field_values()
         
-        # Output the values (for now)
+        # Output the values (for debugging)
         print("=" * 50)
         print("SSH Key Generation - Field Values:")
         print("=" * 50)
@@ -127,7 +127,23 @@ class SSHKeyGeneratorApp:
         print(f"Public Key Directory: {values['pubkey_dir']}")
         print("=" * 50)
         
-        # TODO: Add key generation logic here
+        # Generate the SSH key using Ed25519
+        success, message, priv_key_path, pub_key_path = generate_ssh_key(
+            ssh_comment=values['ssh_comment'],
+            privkey_dir=values['privkey_dir'],
+            pubkey_dir=values['pubkey_dir']
+        )
+        
+        if success:
+            success_msg = f"SSH key generated successfully!\n\nPrivate Key: {priv_key_path}\nPublic Key: {pub_key_path}"
+            print(f"✓ Success: {message}")
+            print(f"  Private Key: {priv_key_path}")
+            print(f"  Public Key: {pub_key_path}")
+            messagebox.showinfo("Success", success_msg)
+        else:
+            error_msg = f"Failed to generate SSH key:\n{message}"
+            print(f"✗ Error: {message}")
+            messagebox.showerror("Error", error_msg)
 
 
 def main():
